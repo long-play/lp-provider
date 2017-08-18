@@ -1,0 +1,19 @@
+WPlatformOracle
+
+The oracle web app for service of digital willing
+
+The oracle is for working with users's contacts and their tracabilities.
+Provides Web Interface for users.
+
+It's a Sails JS app.
+Stores data in the MySQL.
+Communicates with other servers via HTTPS.
+
+Requirments:
+- Node JS
+- MySQL
+- Sails JS
+
+
+(c) Eugene Valeyev
+
