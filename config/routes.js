@@ -21,8 +21,9 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  'GET /create-will': 'WillController.create',
-  'GET /setup-will': 'WillController.setup',
+  'GET  /create-will': { view: 'create-will' },
+  'POST /create-will': 'WillController.create',
+  'POST /setup-will':  'WillController.setup',
 
   /***************************************************************************
   *                                                                          *
@@ -33,8 +34,6 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': {
-    view: 'homepage'
-  }
+  '/': { view: 'homepage' }
 
 };

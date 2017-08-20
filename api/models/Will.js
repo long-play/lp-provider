@@ -8,6 +8,11 @@
 module.exports = {
 
   attributes: {
+    token: {
+      required: true,
+      type: 'string'
+    },
+
     state: {
       required: true,
       type: 'string',
@@ -42,26 +47,30 @@ module.exports = {
   createWill: (contacts) => {
     //todo: check contacts
     const will = {
+      token: '//todo: guid',
       state: 'new',
       contacts: contacts,
       lastCheckedAt: Date.now(),
       encryptionKey: '0xaf1e67'
     };
-    const promise = Will.create(will);
+    const promise = Will.create(will).meta({ fetch: true });
     return promise;
   },
 
-  setupWill: (willId, address) => {
+  setupWill: (willId, address, token) => {
     let theWill = null;
     const promise = Will.findOne({ id: willId }).then( (will) => {
       if (!will) {
         return Promise.reject(/*todo: error*/);
+      } else if (will.token !== token) {
+        return Promise.reject(/*todo: error*/);
       } else if (will.state !== 'new') {
         return Promise.reject(/*todo: error*/);
       }
+      theWill = will;
       will.state = 'pending';
       will.address = address;
-      return will.save();
+      return Will.update({ id: will.id }, will);
     }).then( () => {
       return Promise.resolve(theWill);
     });
@@ -78,8 +87,9 @@ module.exports = {
       } else if (will.address !== address) {
         return Promise.reject(/*todo: error*/);
       }
+      theWill = will;
       will.state = 'active';
-      return will.save();
+      return Will.update({ id: will.id }, will);
     }).then( () => {
       return Promise.resolve(theWill);
     });
@@ -94,9 +104,10 @@ module.exports = {
       } else if (will.address !== address) {
         return Promise.reject(/*todo: error*/);
       }
+      theWill = will;
       will.state = 'deleted';
       will.encryptionKey = '';
-      return will.save();
+      return Will.update({ id: will.id }, will);
     }).then( () => {
       return Promise.resolve(theWill);
     });
@@ -111,8 +122,9 @@ module.exports = {
       } else if (will.state !== 'active') {
         return Promise.reject(/*todo: error*/);
       }
+      theWill = will;
       will.state = 'unpaid';
-      return will.save();
+      return Will.update({ id: will.id }, will);
     }).then( () => {
       return Promise.resolve(theWill);
     });
@@ -127,9 +139,10 @@ module.exports = {
       } else if (will.state !== 'active') {
         return Promise.reject(/*todo: error*/);
       }
+      theWill = will;
       will.state = 'applied';
       will.appliedAt = Date.now();
-      return will.save();
+      return Will.update({ id: will.id }, will);
     }).then( () => {
       return Promise.resolve(theWill);
     });
