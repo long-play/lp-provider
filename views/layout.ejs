@@ -17,7 +17,6 @@
     
     <!--TEMPLATES END-->
 
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.16/clipboard.min.js"></script>
@@ -25,6 +24,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js"></script>
     <!--SCRIPTS-->
     <script src="/dependencies/sails.io.js"></script>
+    <script src="/js/create-will.js"></script>
     <!--SCRIPTS END-->
 
     <div>
@@ -43,7 +43,9 @@
                 </nav>
             </div>
         </div>
-        <%- body %>
+        <div class="uk-container uk-container-expand uk-padding" uk-height-viewport="expand: true">
+            <%- body %>
+        </div>
     </div>
     <div class="uk-notification uk-notification-top-center" style="display: none;"></div>
   </body>
