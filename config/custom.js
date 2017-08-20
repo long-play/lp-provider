@@ -16,8 +16,8 @@ module.exports.custom = {
   * (these may also be overridden in config/env/production.js)               *
   *                                                                          *
   ***************************************************************************/
-  // mailgunDomain: 'transactional-mail.example.com',
-  // mailgunApiKey: 'key-testkeyb183848139913858e8abd9a3',
-  // stripeSecret: 'sk_test_Zzd814nldl91104qor5911gjald',
+  providerAddress: '0x6c5c54a152d4ad644002668b0b3b371cea86daa3',
+  providerPublicKey: '0x3ff0b40b4db4c26e022b691d91ad92f230ca81822a51ba9254d9f246508353f98a03c3355d5c81053893dfdf81ba9e0abcf87b6a55cd5d749be07c5902c289f5',
+  providerPrivateKey: '0x7a5c6539d61903d1baac402cba7c83d612ab4dfefdb97d9f6f93edc32857e6fe'
 
 };

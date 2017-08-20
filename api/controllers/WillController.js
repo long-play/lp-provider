@@ -15,12 +15,12 @@ module.exports = {
 
     Will.createWill(contacts).then( (will) => {
     sails.log.debug(will);
-      const msg = `${sails.config.address}:${will.id}:${will.token}`;
-      const signature = '//todo:'; //todo:
+      const msg = `${sails.config.custom.providerAddress}:${will.id}:${will.token}`;
+      const signature = '//todo:'; //todo: using sails.config.custom.providerPrivateKey
       return res.ok({
         will: will.id,
         token: will.token,
-        address: sails.config.address,
+        address: sails.config.custom.providerAddress,
         signature: signature
       });
     }).catch( (error) => {
