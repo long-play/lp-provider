@@ -38,7 +38,13 @@ module.exports = {
       confirmationCode: '0xc0de',
       expiresAt: Date.now() + sails.config.custom.emailConfirmationTimeout
     };
-    const promise = Contact.create(contact).meta({ fetch: true });
+
+    const promise = Contact.findOne({ email: email }).then( (existingContact) => {
+      if (!existingContact) {
+        return Contact.create(contact).meta({ fetch: true });
+      }
+      return Contact.update({ id: existingContact.id }, contact).meta({ fetch: true });
+    });
     return promise;
   },
 
