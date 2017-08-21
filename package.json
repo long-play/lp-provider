@@ -5,6 +5,7 @@
   "description": "The Web Interface of an Oracle for the Platform for service of digital willing",
   "keywords": [],
   "dependencies": {
+    "aws-sdk": "~2.46.0",
     "sails": "^1.0.0-36",
     "grunt": "1.0.1",
     "sails-hook-orm": "^2.0.0-16",

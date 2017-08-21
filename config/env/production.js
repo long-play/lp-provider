@@ -338,10 +338,21 @@ module.exports = {
   *                                                                         *
   ***************************************************************************/
   custom: {
-    emailConfirmationTimeout: 15 * 60 * 1000, // 15 minutes
-    providerAddress: '',
-    providerPublicKey: '',
-    providerPrivateKey: ''
+    aws: {
+      accessKeyId: '',
+      secretAccessKey: '',
+      region: ''
+    },
+
+    providerInfo: {
+      email: '',
+  
+      address: '',
+      publicKey: '',
+      privateKey: ''
+    },
+
+    emailConfirmationTimeout: 15 * 60 * 1000 // 15 minutes
 
   },
 

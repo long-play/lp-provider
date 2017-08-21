@@ -16,12 +16,12 @@ module.exports = {
     Contact.confirmContact(contacts.email.email, contacts.email.code).then( (contact) => {
       return Will.createWill(contacts);
     }).then( (will) => {
-      const msg = `${sails.config.custom.providerAddress}:${will.id}:${will.token}`;
-      const signature = '//todo:'; //todo: using sails.config.custom.providerPrivateKey
+      const msg = `${sails.config.custom.providerInfo.address}:${will.id}:${will.token}`;
+      const signature = '//todo:'; //todo: using sails.config.custom.providerInfo.privateKey
       return res.ok({
         will: will.id,
         token: will.token,
-        address: sails.config.custom.providerAddress,
+        address: sails.config.custom.providerInfo.address,
         signature: signature
       });
     }).catch( (error) => {

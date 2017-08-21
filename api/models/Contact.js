@@ -5,6 +5,14 @@
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
  */
 
+function randomCode (length = 5, alphabet = '0123456789') {
+  let res = '';
+  for (let i = 0; i < length; i++) {
+    res += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+  }
+  return res;
+};
+
 module.exports = {
 
   attributes: {
@@ -35,7 +43,7 @@ module.exports = {
     const contact = {
       state: 'new',
       email: email,
-      confirmationCode: '0xc0de',
+      confirmationCode: randomCode(),
       expiresAt: Date.now() + sails.config.custom.emailConfirmationTimeout
     };
 
@@ -44,6 +52,17 @@ module.exports = {
         return Contact.create(contact).meta({ fetch: true });
       }
       return Contact.update({ id: existingContact.id }, contact).meta({ fetch: true });
+    }).then( (contacts) => {
+      let result = contacts;
+      if (Array.isArray(contacts) === true) {
+        result = (contacts.length > 0 ? contacts[0] : null);
+      }
+
+      if (result == null) {
+        return Promise.reject(/* error */);
+      }
+
+      return Promise.resolve(result);
     });
     return promise;
   },
