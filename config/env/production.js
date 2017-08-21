@@ -338,6 +338,7 @@ module.exports = {
   *                                                                         *
   ***************************************************************************/
   custom: {
+    emailConfirmationTimeout: 15 * 60 * 1000, // 15 minutes
     providerAddress: '',
     providerPublicKey: '',
     providerPrivateKey: ''

@@ -22,6 +22,7 @@ module.exports.routes = {
   ***************************************************************************/
 
   'GET  /create-will': { view: 'create-will' },
+  'POST /submit-contact': 'ContactController.submit',
   'POST /create-will': 'WillController.create',
   'POST /setup-will':  'WillController.setup',
 

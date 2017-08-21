@@ -8,13 +8,14 @@
 module.exports = {
 
   create: (req, res) => {
-    const contacts = JSON.parse(req.body.contacts);
+    const contacts = req.body.contacts;
 
     //todo: validate contacts
     sails.log.debug(contacts);
 
-    Will.createWill(contacts).then( (will) => {
-    sails.log.debug(will);
+    Contact.confirmContact(contacts.email.email, contacts.email.code).then( (contact) => {
+      return Will.createWill(contacts);
+    }).then( (will) => {
       const msg = `${sails.config.custom.providerAddress}:${will.id}:${will.token}`;
       const signature = '//todo:'; //todo: using sails.config.custom.providerPrivateKey
       return res.ok({
