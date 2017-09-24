@@ -21,7 +21,8 @@ $('#confirm-email').click( (e) => {
     params: { contacts: { email: email } }
   }).then( (response) => {
     const redirect = 'http://localhost:8080/will-create.html';
-    setTimeout( () => { window.location = redirect }, 3000);
+    const params = `?address=${response.address}&will=${response.will}&token=${response.token}&signature=${response.signature}`;
+    setTimeout( () => { window.location = redirect + params }, 3000);
 
     $('#redirect-link').attr('href', redirect);
     $('#confirmed-email-successful').removeAttr('hidden');

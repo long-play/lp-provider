@@ -47,11 +47,11 @@ module.exports = {
   createWill: (contacts) => {
     //todo: check contacts
     const will = {
-      token: '//todo: guid',
+      token: '//todo:guid',
       state: 'new',
       contacts: contacts,
       lastCheckedAt: Date.now(),
-      encryptionKey: '0xaf1e67'
+      encryptionKey: sails.config.custom.providerInfo.publicKey //todo: replace with a unique key
     };
     const promise = Will.create(will).meta({ fetch: true });
     return promise;
@@ -61,11 +61,11 @@ module.exports = {
     let theWill = null;
     const promise = Will.findOne({ id: willId }).then( (will) => {
       if (!will) {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(/*todo: error*/ { message: 'no will' });
       } else if (will.token !== token) {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(/*todo: error*/ { message: `mismatch tokens: [${will.token}] vs [${token}]` });
       } else if (will.state !== 'new') {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(/*todo: error*/ { message: 'mismatch states' });
       }
       theWill = will;
       will.state = 'pending';
@@ -81,7 +81,7 @@ module.exports = {
     let theWill = null;
     const promise = Will.findOne({ id: willId }).then( (will) => {
       if (!will) {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(/*todo: error*/ { message: 'no will' });
       } else if (will.state !== 'pending') {
         return Promise.reject(/*todo: error*/);
       } else if (will.address !== address) {
