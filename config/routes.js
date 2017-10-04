@@ -26,6 +26,8 @@ module.exports.routes = {
   'POST /create-will': 'WillController.create',
   'POST /setup-will':  'WillController.setup',
 
+  'GET /key/public': 'KeyController.find',
+
   /***************************************************************************
   *                                                                          *
   * Make the view located at `views/homepage.ejs` your home page.            *
