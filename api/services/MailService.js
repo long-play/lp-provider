@@ -4,12 +4,26 @@
  * @description :: Server-side logic for sending emails
  */
 
-const AWS = require('aws-sdk');
-let SES = null;
+const request = require('request');
 
-function configure() {
-  AWS.config.update(sails.config.custom.aws);
-  SES = new AWS.SES({apiVersion: '2010-12-01'});
+function compoundEmailObject(to, subject, body) {
+  const email = {
+    formData: {
+      from: sails.config.custom.mailgun.sender,
+      to: to,
+      subject: subject,
+      text: body
+    },
+
+    auth: {
+      user: sails.config.custom.mailgun.apiUser,
+      pass: sails.config.custom.mailgun.apiKey
+    },
+
+    method: 'POST'
+  };
+
+  return email;
 }
 
 module.exports = {
@@ -19,23 +33,11 @@ module.exports = {
    */
   send: (to, subject, body) => {
     const promise = new Promise( (resolve, reject) => {
-      SES.sendEmail({
-        Source: sails.config.custom.providerInfo.email,
-        Destination: { ToAddresses: [ to ] },
-        Message: {
-          Subject: { Data: subject },
-          Body: {
-            Text: { Data: body }
-          }
-        }
-      }, (err, data) => {
-        if (err) { reject(err); }
-        else { resolve(data); }
+      request(`${sails.config.custom.mailgun.apiURL}/messages`, compoundEmailObject(to, subject, body), (error, response, body) => {
+        if (error) reject(error);
+        else resolve(JSON.parse(body));
       });
     });
     return promise;
   }
 };
-
-configure();
-

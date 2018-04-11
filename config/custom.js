@@ -22,6 +22,13 @@ module.exports.custom = {
     region: 'us-east-1'
   },
 
+  mailgun: {
+    sender: 'E-Will TEST oracle <god@e-will.tech>',
+    apiUser: 'api',
+    apiKey: 'key-26f702ef3a1b7ed388f36d03ebba0022',
+    apiURL: 'https://api.mailgun.net/v3/mail.e-will.tech'
+  },
+
   etherscan: {
     apiKey: 'Z8B4AWI1AXU2JYD6P9HD7I3G9HZPWQPGKH',
   },
