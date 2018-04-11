@@ -37,7 +37,7 @@ module.exports = {
       const tx = response.result;
       return res.ok({
         address: address,
-        publicKey: tx.publicKey
+        publicKey: '0x04' + tx.publicKey.slice(2)
       });
     }).catch( (error) => {
       return res.serverError(error);

@@ -17,8 +17,8 @@ module.exports.custom = {
   *                                                                          *
   ***************************************************************************/
   aws: {
-    accessKeyId: 'AKIAIKYMRCXEHUTSUAVQ',
-    secretAccessKey: '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',
+    accessKeyId: 'AKIAJDJP52PAV47HNQXQ',
+    secretAccessKey: '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',
     region: 'us-east-1'
   },
 
@@ -27,7 +27,7 @@ module.exports.custom = {
   },
 
   providerInfo: {
-    email: 'vps2017@valeyev.ru',
+    email: 'vps2018@valeyev.ru',
 
     address: '0x6c5c54a152d4ad644002668b0b3b371cea86daa3',
     publicKey: '0x043ff0b40b4db4c26e022b691d91ad92f230ca81822a51ba9254d9f246508353f98a03c3355d5c81053893dfdf81ba9e0abcf87b6a55cd5d749be07c5902c289f5',
