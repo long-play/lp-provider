@@ -20,8 +20,8 @@ $('#confirm-email').click( (e) => {
     method: 'POST',
     params: { contacts: { email: email } }
   }).then( (response) => {
-    const redirect = 'http://localhost:8080/will-create.html';
-    const params = `?address=${response.address}&will=${response.will}&token=${response.token}&signature=${response.signature}`;
+    const redirect = `${WPConfig.platformUrl}/create-will.html`;
+    const params = `?address=${response.address}&willId=${response.willId}&token=${response.token}&signature=${response.signature}`;
     setTimeout( () => { window.location = redirect + params }, 3000);
 
     $('#redirect-link').attr('href', redirect);

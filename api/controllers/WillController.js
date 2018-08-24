@@ -19,7 +19,7 @@ module.exports = {
       const msg = `${sails.config.custom.providerInfo.address}:${will.id}:${will.token}`;
       const signature = '//todo:'; //todo: using sails.config.custom.providerInfo.privateKey
       return res.ok({
-        will: will.id,
+        willId: will.id,
         token: will.token,
         address: sails.config.custom.providerInfo.address,
         signature: signature
@@ -30,17 +30,17 @@ module.exports = {
   },
 
   setup: (req, res) => {
-    const will = req.body.will;
+    const willId = req.body.willId;
     const token = req.body.token;
     const address = req.body.address;
 
     //todo: validate will, token & address
 
-    Will.setupWill(will, address, token).then( (will) => {
+    Will.setupWill(willId, address, token).then( (will) => {
       const msg = `${will.id}:${will.key}`;
       const signature = '//todo:'; //todo:
       return res.ok({
-        will: will.id,
+        willId: will.id,
         key: will.encryptionKey,
         signature: signature
       });
