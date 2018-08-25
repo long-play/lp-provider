@@ -6,7 +6,9 @@
   "keywords": [],
   "dependencies": {
     "async": "2.0.1",
-    "aws-sdk": "~2.46.0",
+    "elliptic": "^6.4.1",
+    "eth-lib": "^0.2.8",
+    "ethereumjs-util": "^5.2.0",
     "grunt": "1.0.1",
     "lodash": "3.10.1",
     "request": "^2.83.0",
