@@ -44,7 +44,7 @@ module.exports = {
         Bytes.fromNat(tx.nonce),
         Bytes.fromNat(tx.gasPrice),
         Bytes.fromNat(tx.gas),
-        tx.to.toLowerCase(),
+        tx.to ? tx.to.toLowerCase() : "0x",
         Bytes.fromNat(tx.value),
         tx.input,
         Bytes.fromNat(tx.chainId || "0x1"),
@@ -58,11 +58,9 @@ module.exports = {
         return v;
       };
 
-      const rawTxHash = eu.keccak(rlpEncoded);
+      const rawTxHash = eu.keccak256(rlpEncoded);
       const euPubKey = eu.ecrecover(rawTxHash, signatureV(tx.v), tx.r, tx.s);
       const addr = '0x' + eu.pubToAddress(euPubKey).toString('hex');
-      sails.log('address: ' + addr);
-      sails.log('pub key: ' + euPubKey.toString('hex'));
 
       if (addr !== address) {
         return Promise.reject('Wrong address'); //todo: error

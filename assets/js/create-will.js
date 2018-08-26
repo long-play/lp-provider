@@ -19,7 +19,7 @@ $('#confirm-email').click( (e) => {
   const code = $('#confirmation-code').val();
   ewill.confirmEmail(email, code).then( (response) => {
     const redirect = `${WPConfig.platformUrl}/create-will.html`;
-    const params = `?address=${response.address}&willId=${response.willId}&token=${response.token}&signature=${response.signature}`;
+    const params = `?address=${response.address}&willId=${response.willId}&token=${response.token}&signaturev=${response.signature.v}&signaturer=${response.signature.r}&signatures=${response.signature.s}`;
     setTimeout( () => { window.location = redirect + params }, 3000);
 
     $('#redirect-link').attr('href', redirect);
