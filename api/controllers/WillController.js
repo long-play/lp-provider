@@ -20,13 +20,17 @@ module.exports = {
     }).then( (will) => {
       const msg = Buffer.concat([EthUtil.toBuffer(sails.config.custom.providerInfo.address), EthUtil.toBuffer(will.id), EthUtil.toBuffer(will.token)]);
       const hash = EthUtil.keccak256(msg);
-      const signature = EthUtil.ecsign(hash, sails.config.custom.providerInfo.privateKey);
+      const signature = EthUtil.ecsign(hash, EthUtil.toBuffer(sails.config.custom.providerInfo.privateKey));
 
       return res.ok({
         willId: will.id,
         token: will.token,
         address: sails.config.custom.providerInfo.address,
-        signature: signature
+        signature: {
+          v: signature.v,
+          r: '0x' + signature.r.toString('hex'),
+          s: '0x' + signature.s.toString('hex'),
+        }
       });
     }).catch( (error) => {
       return res.serverError(error);
@@ -38,16 +42,18 @@ module.exports = {
     const token = req.body.token;
     const address = req.body.address;
 
-    //todo: validate will, token & address
-
     Will.setupWill(willId, address, token).then( (will) => {
       const msg = Buffer.concat([EthUtil.toBuffer(will.id), EthUtil.toBuffer(will.encryptionKey)]);
       const hash = EthUtil.keccak256(msg);
-      const signature = EthUtil.ecsign(hash, sails.config.custom.providerInfo.privateKey);
+      const signature = EthUtil.ecsign(hash, EthUtil.toBuffer(sails.config.custom.providerInfo.privateKey));
       return res.ok({
         willId: will.id,
         key: will.encryptionKey,
-        signature: signature
+        signature: {
+          v: signature.v,
+          r: '0x' + signature.r.toString('hex'),
+          s: '0x' + signature.s.toString('hex'),
+        }
       });
     }).catch( (error) => {
       return res.serverError(error);

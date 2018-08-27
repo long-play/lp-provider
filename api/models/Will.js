@@ -5,6 +5,8 @@
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
  */
 
+const Bytes = require("eth-lib/lib/bytes");
+
 module.exports = {
 
   attributes: {
@@ -47,7 +49,7 @@ module.exports = {
   createWill: (contacts) => {
     //todo: check contacts
     const will = {
-      token: '//todo:guid',
+      token: Bytes.random(32),
       state: 'new',
       contacts: contacts,
       lastCheckedAt: Date.now(),
