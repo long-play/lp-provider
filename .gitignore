@@ -48,7 +48,7 @@
 ################################################
 
 config/local.js
-assets/js/config.js
+assets/javascript/e-will-config.js
 
 
 
