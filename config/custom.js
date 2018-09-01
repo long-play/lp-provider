@@ -23,7 +23,7 @@ module.exports.custom = {
   },
 
   mailgun: {
-    sender: 'E-Will TEST oracle <god@e-will.tech>',
+    sender: 'E-will TEST Service <no-reply@e-will.tech>',
     apiUser: 'api',
     apiKey: 'key-26f702ef3a1b7ed388f36d03ebba0022',
     apiURL: 'https://api.mailgun.net/v3/mail.e-will.tech'
