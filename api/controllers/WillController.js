@@ -18,7 +18,7 @@ module.exports = {
     Contact.confirmContact(contacts.email.email, contacts.email.code).then( (contact) => {
       return Will.createWill(contacts);
     }).then( (will) => {
-      const msg = Buffer.concat([EthUtil.toBuffer(sails.config.custom.providerInfo.address), EthUtil.toBuffer(will.id), EthUtil.toBuffer(will.token)]);
+      const msg = Buffer.concat([EthUtil.toBuffer(sails.config.custom.providerInfo.address), EthUtil.toBuffer('' + will.id), EthUtil.toBuffer(will.token)]);
       const hash = EthUtil.keccak256(msg);
       const signature = EthUtil.ecsign(hash, EthUtil.toBuffer(sails.config.custom.providerInfo.privateKey));
 
