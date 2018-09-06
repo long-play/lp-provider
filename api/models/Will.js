@@ -79,15 +79,25 @@ module.exports = {
     return promise;
   },
 
-  activateWill: (willId, address) => {
+  canActivateWill: (willId, address) => {
     let theWill = null;
     const promise = Will.findOne({ id: willId }).then( (will) => {
       if (!will) {
-        return Promise.reject(/*todo: error*/ { message: 'no will' });
       } else if (will.state !== 'pending') {
-        return Promise.reject(/*todo: error*/);
       } else if (will.address !== address) {
-        return Promise.reject(/*todo: error*/);
+      } else {
+        theWill = will;
+      }
+      return Promise.resolve(theWill);
+    });
+    return promise;
+  },
+
+  activateWill: (willId, address) => {
+    let theWill = null;
+    const promise = Will.canActivateWill(willId, address).then( (will) => {
+      if (!will) {
+        return Promise.reject(/*todo: error*/ { message: 'no will' });
       }
       theWill = will;
       will.state = 'active';

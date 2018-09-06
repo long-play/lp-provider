@@ -42,6 +42,7 @@ module.exports.custom = {
   },
 
   ethereum: {
+    historyLength: 1024, // blocks, ~1.5 hours
     contracts: {
       platform: '0xfdf0b3a199df8fb281ac5b156e9075cf3e7206cc',
       escrow: '0x7b3de9412ecaccd65b8cec2916b74115bbd5a519'
