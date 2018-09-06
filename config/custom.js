@@ -41,6 +41,10 @@ module.exports.custom = {
     privateKey: '0xe8d1f6cb90fef5fc9696cc77858b42d4e99b0959246d86f4584b49f5af0fe3f9'
   },
 
+  ethereum: {
+    geth: 'https://e-will.valeyev.ru/geth'
+  },
+
   emailConfirmationTimeout: 60000 // 1 minute for dev mode
 
 

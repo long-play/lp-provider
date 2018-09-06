@@ -1,7 +1,7 @@
 {
   "name": "w-platform-oracle",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "The Web Interface of an Oracle for the Platform for service of digital willing",
   "keywords": [],
   "dependencies": {
@@ -9,13 +9,15 @@
     "elliptic": "^6.4.1",
     "eth-lib": "^0.2.8",
     "ethereumjs-util": "^5.2.0",
-    "grunt": "1.0.1",
+    "grunt": "^1.0.3",
     "lodash": "3.10.1",
-    "request": "^2.83.0",
-    "sails": "^1.0.0-36",
-    "sails-hook-grunt": "^2.0.0",
-    "sails-hook-orm": "^2.0.0-16",
-    "sails-hook-sockets": "^1.4.0"
+    "request": "^2.88.0",
+    "sails": "^1.0.2",
+    "sails-hook-cron": "^3.0.0",
+    "sails-hook-grunt": "^2.2.1",
+    "sails-hook-orm": "^2.1.0",
+    "sails-hook-sockets": "^1.5.3",
+    "web3": "^1.0.0-beta.36"
   },
   "devDependencies": {
     "eslint": "3.5.0"

@@ -42,6 +42,8 @@ module.exports = {
     const token = req.body.token;
     const address = req.body.address;
 
+    //todo: add checking of signature
+
     Will.setupWill(willId, address, token).then( (will) => {
       const msg = Buffer.concat([EthUtil.toBuffer(will.id), EthUtil.toBuffer(will.encryptionKey)]);
       const hash = EthUtil.keccak256(msg);

@@ -66,7 +66,7 @@ module.exports = {
         return Promise.reject(/*todo: error*/ { message: 'no will' });
       } else if (will.token !== token) {
         return Promise.reject(/*todo: error*/ { message: `mismatch tokens: [${will.token}] vs [${token}]` });
-      } else if (will.state !== 'new') {
+      } else if (will.state !== 'new' && will.state !== 'pending') {
         return Promise.reject(/*todo: error*/ { message: 'mismatch states' });
       }
       theWill = will;
