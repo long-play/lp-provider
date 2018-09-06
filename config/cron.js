@@ -1,6 +1,6 @@
 module.exports.cron = {
   handleNewWills: {
-    schedule: '0 5 * * * *',
+    schedule: '0 * * * * *',
     onTick: function () {
       EthereumService.handleNewWills();
     },

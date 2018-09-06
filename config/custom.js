@@ -42,7 +42,13 @@ module.exports.custom = {
   },
 
   ethereum: {
-    geth: 'https://e-will.valeyev.ru/geth'
+    contracts: {
+      platform: '0xfdf0b3a199df8fb281ac5b156e9075cf3e7206cc',
+      escrow: '0x7b3de9412ecaccd65b8cec2916b74115bbd5a519'
+    },
+    gethUrl: 'https://e-will.valeyev.ru/geth/',
+    swarmUrl: 'https://mh.getmobileup.com/swarm',
+    chainID: 9
   },
 
   emailConfirmationTimeout: 60000 // 1 minute for dev mode
