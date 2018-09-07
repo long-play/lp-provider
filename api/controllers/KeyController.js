@@ -25,7 +25,7 @@ function requestEtherscan(query) {
 };
 
 module.exports = {
-  
+
   find: (req, res) => {
     const address = req.query.address.toLowerCase();
 

@@ -108,6 +108,34 @@ module.exports = {
     return promise;
   },
 
+  willsToCheckActivity: () => {
+    const promise = Will.find({
+      lastCheckedAt: { '<': Date.now() - 30 * 24 * 3600 },
+      state: 'active'
+    }).then( (wills) => {
+      sails.log.debug(wills);
+      return Promise.resolve(wills);
+    });
+    return promise;
+  },
+
+  confirmWill: (willId) => {
+    let theWill = null;
+    const promise = Will.findOne({ id: willId }).then( (will) => {
+      if (!will) {
+        return Promise.reject(/*todo: error*/);
+      } else if (will.state !== 'active') {
+        return Promise.reject(/*todo: error*/);
+      }
+      theWill = will;
+      will.lastCheckedAt = Date.now();
+      return Will.update({ id: will.id }, will);
+    }).then( () => {
+      return Promise.resolve(theWill);
+    });
+    return promise;
+  },
+
   deleteWill: (willId, address) => {
     let theWill = null;
     const promise = Will.findOne({ id: willId }).then( (will) => {

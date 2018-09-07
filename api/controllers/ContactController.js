@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-  
+
   submit: (req, res) => {
     const email = req.body.email;
 

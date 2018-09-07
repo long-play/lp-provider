@@ -58,7 +58,7 @@ module.exports = {
         result = (contacts.length > 0 ? contacts[0] : null);
       }
 
-      if (result == null) {
+      if (!result) {
         return Promise.reject(/* error */);
       }
 

@@ -12,11 +12,11 @@ const ewPlatform = new web3.eth.Contract(require('../abis/abi-platform.json'), s
 const ewEscrow = new web3.eth.Contract(require('../abis/abi-escrow.json'), sails.config.custom.ethereum.contracts.escrow);
 let oldestBlockNumber = 0;
 
-sails.log.debug(`Started service with address ${account.address}`);
+sails.log.debug(`Started Ethereum service with address ${account.address}`);
 
 web3.eth.getBlockNumber().then( (blockNumber) => {
   sails.log.info(`Current block number is ${blockNumber}`);
-  oldestBlockNumber = blockNumber - sails.config.custom.ethereum.historyLength;
+  //oldestBlockNumber = blockNumber - sails.config.custom.ethereum.historyLength;
 });
 
 function sendTx(signedTx) {

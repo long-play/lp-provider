@@ -16,6 +16,8 @@ module.exports.custom = {
   * (these may also be overridden in config/env/production.js)               *
   *                                                                          *
   ***************************************************************************/
+  domain: 'http://localhost:1337',
+
   aws: {
     accessKeyId: 'AKIAJDJP52PAV47HNQXQ',
     secretAccessKey: '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',
@@ -52,7 +54,8 @@ module.exports.custom = {
     chainID: 9
   },
 
-  emailConfirmationTimeout: 60000 // 1 minute for dev mode
+  activityConfirmationTimeout: 600000,  // 10 minutes for dev mode
+  emailConfirmationTimeout: 60000       // 1 minute for dev mode
 
 
 };
