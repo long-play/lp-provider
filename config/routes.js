@@ -26,7 +26,7 @@ module.exports.routes = {
   'POST /create-will': 'WillController.create',
   'POST /setup-will':  'WillController.setup',
 
-  'GET /hearbeat': 'HeartbeatController.confirm',
+  'GET /heartbeat': 'HeartbeatController.submit',
 
   'GET /key/public': 'KeyController.find',
 

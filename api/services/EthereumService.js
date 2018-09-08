@@ -111,5 +111,34 @@ module.exports = {
     }).catch( (err) => {
       sails.log.error(`Failed to get created wills: ${JSON.stringify(err)}`);
     });
+  },
+
+  /**
+   * `EthereumService.refreshWill`
+   */
+  refreshWill: (willId) => {
+    const refreshWill = ewPlatform.methods.refreshWill(willId);
+    const promise = refreshWill.estimateGas({ from: sails.config.custom.providerInfo.address }).then( (gasLimit) => {
+      const payload = refreshWill.encodeABI();
+      console.log(payload);
+
+      const rawTx = {
+        to: ewPlatform.options.address,
+        data: payload,
+        value: 0,
+        gasLimit: gasLimit,
+        chainId: sails.config.custom.ethereum.chainID
+      };
+      return account.signTransaction(rawTx);
+    }).then( (tx) => {
+      sails.log.info(`Tx for refreshing will ${will.id} (${willId}) signed: ${tx.rawTransaction.toString('hex')}`);
+      return sendTx(tx.rawTransaction);
+    }).then( (txId) => {
+      sails.log.info(`Tx for refreshing will ${willId} sent: ${txId}`);
+      return Promise.resolve(txId);
+    });
+
+    return promise;
   }
+
 };

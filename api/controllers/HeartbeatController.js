@@ -8,7 +8,20 @@
 module.exports = {
 
   submit: (req, res) => {
-    return res.ok({});
+    let theWill = null;
+    const token = req.query.token.toLowerCase();
+
+    const promise = Heartbeat.confirmHeartbeat(token).then( (heartbeat) => {
+      return Will.confirmWill(heartbeat.willId);
+    }).then( (will) => {
+      theWill = will;
+      return EthereumService.refreshWill(theWill.id);
+    }).then( (tx) => {
+      return res.ok({ message: `Will ${theWill.id} was successfully marked as active` });
+    }).catch( (err) => {
+      return res.serverError({ error: err });
+    });
+    return promise;
   },
 
 };
