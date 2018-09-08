@@ -47,7 +47,10 @@ module.exports = {
   },
 
   createWill: (contacts) => {
-    //todo: check contacts
+    if (ValidationService.validateEmail(contacts.email.email) !== true) {
+      return res.serverError(ErrorService.InvalidEmailFormat);
+    }
+
     const will = {
       token: Bytes.random(32),
       state: 'new',
@@ -63,11 +66,11 @@ module.exports = {
     let theWill = null;
     const promise = Will.findOne({ id: willId }).then( (will) => {
       if (!will) {
-        return Promise.reject(/*todo: error*/ { message: 'no will' });
+        return Promise.reject(ErrorService.ObjectNotFound);
       } else if (will.token !== token) {
-        return Promise.reject(/*todo: error*/ { message: `mismatch tokens: [${will.token}] vs [${token}]` });
+        return Promise.reject(ErrorService.WrongToken);
       } else if (will.state !== 'new' && will.state !== 'pending') {
-        return Promise.reject(/*todo: error*/ { message: 'mismatch states' });
+        return Promise.reject(ErrorService.WrongState);
       }
       theWill = will;
       will.state = 'pending';
@@ -97,7 +100,7 @@ module.exports = {
     let theWill = null;
     const promise = Will.canActivateWill(willId, address).then( (will) => {
       if (!will) {
-        return Promise.reject(/*todo: error*/ { message: 'no will' });
+        return Promise.reject(ErrorService.ObjectNotFound);
       }
       theWill = will;
       will.state = 'active';
@@ -123,9 +126,9 @@ module.exports = {
     let theWill = null;
     const promise = Will.findOne({ id: willId }).then( (will) => {
       if (!will) {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(ErrorService.ObjectNotFound);
       } else if (will.state !== 'active') {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(ErrorService.WrongState);
       }
       theWill = will;
       will.lastCheckedAt = Date.now();
@@ -140,9 +143,9 @@ module.exports = {
     let theWill = null;
     const promise = Will.findOne({ id: willId }).then( (will) => {
       if (!will) {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(ErrorService.ObjectNotFound);
       } else if (will.address !== address) {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(ErrorService.AddressesMismatch);
       }
       theWill = will;
       will.state = 'deleted';
@@ -158,9 +161,9 @@ module.exports = {
     let theWill = null;
     const promise = Will.findOne({ id: willId }).then( (will) => {
       if (!will) {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(ErrorService.ObjectNotFound);
       } else if (will.state !== 'active') {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(ErrorService.WrongState);
       }
       theWill = will;
       will.state = 'unpaid';
@@ -175,9 +178,9 @@ module.exports = {
     let theWill = null;
     const promise = Will.findOne({ id: willId }).then( (will) => {
       if (!will) {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(ErrorService.ObjectNotFound);
       } else if (will.state !== 'active') {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(ErrorService.WrongState);
       }
       theWill = will;
       will.state = 'applied';

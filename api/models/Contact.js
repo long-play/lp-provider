@@ -71,14 +71,14 @@ module.exports = {
     let theContact = null;
     const promise = Contact.findOne({ email: email }).then( (contact) => {
       if (!contact) {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(ErrorService.ObjectNotFound);
       } else if (contact.state !== 'new') {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(ErrorService.WrongState);
       } else if (contact.expiresAt <= Date.now()) {
         const expired = Contact.update({ id: contact.id }, { state: 'expired' });
-        return expired.then( () => Promise.reject(/*todo: error*/) );
+        return expired.then( () => Promise.reject(ErrorService.Expired) );
       } else if (contact.confirmationCode !== code) {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(ErrorService.WrongConfirmationCode);
       }
       theContact = contact;
       contact.state = 'confirmed';

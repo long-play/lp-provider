@@ -10,7 +10,9 @@ module.exports = {
   submit: (req, res) => {
     const email = req.body.email;
 
-    //todo: validate email format
+    if (ValidationService.validateEmail(email) !== true) {
+      return res.serverError(ErrorService.InvalidEmailFormat);
+    }
 
     let theContact = null;
     Contact.createContact(email).then( (contact) => {

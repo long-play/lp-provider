@@ -12,9 +12,6 @@ module.exports = {
   create: (req, res) => {
     const contacts = req.body.contacts;
 
-    //todo: validate contacts
-    sails.log.debug(contacts);
-
     Contact.confirmContact(contacts.email.email, contacts.email.code).then( (/*contact*/) => {
       return Will.createWill(contacts);
     }).then( (will) => {

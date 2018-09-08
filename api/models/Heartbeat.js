@@ -47,12 +47,12 @@ module.exports = {
     let theHeartbeat = null;
     const promise = Heartbeat.findOne({ token: token }).then( (heartbeat) => {
       if (!heartbeat) {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(ErrorService.ObjectNotFound);
       } else if (heartbeat.state !== 'new') {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(ErrorService.WrongState);
       } else if (heartbeat.expiresAt <= Date.now()) {
         const expired = Heartbeat.update({ id: heartbeat.id }, { state: 'expired' });
-        return expired.then( () => Promise.reject(/*todo: error*/) );
+        return expired.then( () => Promise.reject(ErrorService.Expired) );
       }
       theHeartbeat = heartbeat;
       heartbeat.state = 'confirmed';

@@ -15,6 +15,7 @@ function requestEtherscan(query) {
   const baseUrl = `http://api.etherscan.io/api?apikey=${apiKey}`;
   const url = `${baseUrl}&${query}`;
   sails.log.info(url);
+
   const promise = new Promise( (resolve, reject) => {
     request(url, (error, response, body) => {
       if (error) { reject(error); }
@@ -31,10 +32,13 @@ module.exports = {
 
     const query = `module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=asc`;
     requestEtherscan(query).then( (response) => {
-      //todo: if response.status != 1 || !response.result || response.result.length == 0 throw
+      if (response.status !== '1' || !response.result || response.result.length === 0) {
+        return Promise.reject(ErrorService.FailedEtherscanRequest);
+      }
+
       const txs = response.result;
       const outTx = txs.find( tx => tx.from.toLowerCase() === address );
-      if (!outTx) { return Promise.reject('Not found'); } //todo; make a correct error
+      if (!outTx) { return Promise.reject(ErrorService.KeyNotFound); }
       const txId = outTx.hash;
       const query = `module=proxy&action=eth_getTransactionByHash&txhash=${txId}`;
       return requestEtherscan(query);
@@ -63,7 +67,7 @@ module.exports = {
       const addr = '0x' + eu.pubToAddress(euPubKey).toString('hex');
 
       if (addr !== address) {
-        return Promise.reject('Wrong address'); //todo: error
+        return Promise.reject(ErrorService.AddressesMismatch);
       }
 
       return res.ok({
