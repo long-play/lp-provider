@@ -15,7 +15,7 @@ module.exports = {
     //todo: validate contacts
     sails.log.debug(contacts);
 
-    Contact.confirmContact(contacts.email.email, contacts.email.code).then( (contact) => {
+    Contact.confirmContact(contacts.email.email, contacts.email.code).then( (/*contact*/) => {
       return Will.createWill(contacts);
     }).then( (will) => {
       const msg = Buffer.concat([EthUtil.toBuffer(sails.config.custom.providerInfo.address), EthUtil.toBuffer('' + will.id), EthUtil.toBuffer(will.token)]);

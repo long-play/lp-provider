@@ -346,7 +346,7 @@ module.exports = {
 
     providerInfo: {
       email: '',
-  
+
       address: '',
       publicKey: '',
       privateKey: ''

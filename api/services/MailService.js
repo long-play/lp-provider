@@ -34,8 +34,8 @@ module.exports = {
   send: (to, subject, body) => {
     const promise = new Promise( (resolve, reject) => {
       request(`${sails.config.custom.mailgun.apiURL}/messages`, compoundEmailObject(to, subject, body), (error, response, body) => {
-        if (error) reject(error);
-        else resolve(JSON.parse(body));
+        if (error) { reject(error); }
+        else { resolve(JSON.parse(body)); }
       });
     });
     return promise;

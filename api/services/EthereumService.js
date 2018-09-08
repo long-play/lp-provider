@@ -9,7 +9,6 @@ const Web3 = require('web3');
 const web3 = new Web3(sails.config.custom.ethereum.gethUrl);
 const account = web3.eth.accounts.privateKeyToAccount(sails.config.custom.providerInfo.privateKey);
 const ewPlatform = new web3.eth.Contract(require('../abis/abi-platform.json'), sails.config.custom.ethereum.contracts.platform);
-const ewEscrow = new web3.eth.Contract(require('../abis/abi-escrow.json'), sails.config.custom.ethereum.contracts.escrow);
 let oldestBlockNumber = 0;
 
 sails.log.debug(`Started Ethereum service with address ${account.address}`);
@@ -30,7 +29,7 @@ function sendTx(signedTx) {
     defer.once('receipt', (receipt) => {
       sails.log.debug(`Tx receipt received: ${ JSON.stringify(receipt) }`);
     });
-    defer.once('confirmation', (count, receipt) => {
+    defer.once('confirmation', (count/*, receipt*/) => {
       sails.log.debug(`Tx comfirmed ${count} times`);
     });
     defer.once('error', (err) => {

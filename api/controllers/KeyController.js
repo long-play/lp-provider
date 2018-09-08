@@ -7,8 +7,8 @@
 
 const request = require('request');
 const eu = require('ethereumjs-util');
-const RLP = require("eth-lib/lib/rlp");
-const Bytes = require("eth-lib/lib/bytes");
+const RLP = require('eth-lib/lib/rlp');
+const Bytes = require('eth-lib/lib/bytes');
 
 function requestEtherscan(query) {
   const apiKey = sails.config.custom.etherscan.apiKey;
@@ -17,8 +17,8 @@ function requestEtherscan(query) {
   sails.log.info(url);
   const promise = new Promise( (resolve, reject) => {
     request(url, (error, response, body) => {
-      if (error) reject(error);
-      else resolve(JSON.parse(body));
+      if (error) { reject(error); }
+      else { resolve(JSON.parse(body)); }
     });
   });
   return promise;
@@ -34,7 +34,7 @@ module.exports = {
       //todo: if response.status != 1 || !response.result || response.result.length == 0 throw
       const txs = response.result;
       const outTx = txs.find( tx => tx.from.toLowerCase() === address );
-      if (!outTx) return Promise.reject('Not found'); //todo; make a correct error
+      if (!outTx) { return Promise.reject('Not found'); } //todo; make a correct error
       const txId = outTx.hash;
       const query = `module=proxy&action=eth_getTransactionByHash&txhash=${txId}`;
       return requestEtherscan(query);
@@ -44,17 +44,17 @@ module.exports = {
         Bytes.fromNat(tx.nonce),
         Bytes.fromNat(tx.gasPrice),
         Bytes.fromNat(tx.gas),
-        tx.to ? tx.to.toLowerCase() : "0x",
+        tx.to ? tx.to.toLowerCase() : '0x',
         Bytes.fromNat(tx.value),
         tx.input,
-        Bytes.fromNat(tx.chainId || "0x1"),
-        "0x",
-        "0x"
+        Bytes.fromNat(tx.chainId || '0x1'),
+        '0x',
+        '0x'
       ]);
 
       const signatureV = (rawV) => {
         let v = rawV;
-        if (rawV > 35) v = rawV - 10;
+        if (rawV > 35) { v = rawV - 10; }
         return v;
       };
 

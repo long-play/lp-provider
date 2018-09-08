@@ -5,7 +5,7 @@
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
  */
 
-const Bytes = require("eth-lib/lib/bytes");
+const Bytes = require('eth-lib/lib/bytes');
 
 module.exports = {
 
