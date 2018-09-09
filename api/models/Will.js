@@ -5,6 +5,8 @@
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
  */
 
+const Bytes = require('eth-lib/lib/bytes');
+
 module.exports = {
 
   attributes: {
@@ -45,9 +47,12 @@ module.exports = {
   },
 
   createWill: (contacts) => {
-    //todo: check contacts
+    if (ValidationService.validateEmail(contacts.email.email) !== true) {
+      return res.serverError(ErrorService.InvalidEmailFormat);
+    }
+
     const will = {
-      token: '//todo:guid',
+      token: Bytes.random(32),
       state: 'new',
       contacts: contacts,
       lastCheckedAt: Date.now(),
@@ -61,11 +66,11 @@ module.exports = {
     let theWill = null;
     const promise = Will.findOne({ id: willId }).then( (will) => {
       if (!will) {
-        return Promise.reject(/*todo: error*/ { message: 'no will' });
+        return Promise.reject(ErrorService.ObjectNotFound);
       } else if (will.token !== token) {
-        return Promise.reject(/*todo: error*/ { message: `mismatch tokens: [${will.token}] vs [${token}]` });
-      } else if (will.state !== 'new') {
-        return Promise.reject(/*todo: error*/ { message: 'mismatch states' });
+        return Promise.reject(ErrorService.WrongToken);
+      } else if (will.state !== 'new' && will.state !== 'pending') {
+        return Promise.reject(ErrorService.WrongState);
       }
       theWill = will;
       will.state = 'pending';
@@ -77,18 +82,56 @@ module.exports = {
     return promise;
   },
 
-  activateWill: (willId, address) => {
+  canActivateWill: (willId, address) => {
     let theWill = null;
     const promise = Will.findOne({ id: willId }).then( (will) => {
       if (!will) {
-        return Promise.reject(/*todo: error*/ { message: 'no will' });
       } else if (will.state !== 'pending') {
-        return Promise.reject(/*todo: error*/);
       } else if (will.address !== address) {
-        return Promise.reject(/*todo: error*/);
+      } else {
+        theWill = will;
+      }
+      return Promise.resolve(theWill);
+    });
+    return promise;
+  },
+
+  activateWill: (willId, address) => {
+    let theWill = null;
+    const promise = Will.canActivateWill(willId, address).then( (will) => {
+      if (!will) {
+        return Promise.reject(ErrorService.ObjectNotFound);
       }
       theWill = will;
       will.state = 'active';
+      return Will.update({ id: will.id }, will);
+    }).then( () => {
+      return Promise.resolve(theWill);
+    });
+    return promise;
+  },
+
+  willsToCheckActivity: () => {
+    const promise = Will.find({
+      lastCheckedAt: { '<': Date.now() - 30 * 24 * 3600 },
+      state: 'active'
+    }).then( (wills) => {
+      sails.log.debug(wills);
+      return Promise.resolve(wills);
+    });
+    return promise;
+  },
+
+  confirmWill: (willId) => {
+    let theWill = null;
+    const promise = Will.findOne({ id: willId }).then( (will) => {
+      if (!will) {
+        return Promise.reject(ErrorService.ObjectNotFound);
+      } else if (will.state !== 'active') {
+        return Promise.reject(ErrorService.WrongState);
+      }
+      theWill = will;
+      will.lastCheckedAt = Date.now();
       return Will.update({ id: will.id }, will);
     }).then( () => {
       return Promise.resolve(theWill);
@@ -100,9 +143,9 @@ module.exports = {
     let theWill = null;
     const promise = Will.findOne({ id: willId }).then( (will) => {
       if (!will) {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(ErrorService.ObjectNotFound);
       } else if (will.address !== address) {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(ErrorService.AddressesMismatch);
       }
       theWill = will;
       will.state = 'deleted';
@@ -118,9 +161,9 @@ module.exports = {
     let theWill = null;
     const promise = Will.findOne({ id: willId }).then( (will) => {
       if (!will) {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(ErrorService.ObjectNotFound);
       } else if (will.state !== 'active') {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(ErrorService.WrongState);
       }
       theWill = will;
       will.state = 'unpaid';
@@ -135,9 +178,9 @@ module.exports = {
     let theWill = null;
     const promise = Will.findOne({ id: willId }).then( (will) => {
       if (!will) {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(ErrorService.ObjectNotFound);
       } else if (will.state !== 'active') {
-        return Promise.reject(/*todo: error*/);
+        return Promise.reject(ErrorService.WrongState);
       }
       theWill = will;
       will.state = 'applied';

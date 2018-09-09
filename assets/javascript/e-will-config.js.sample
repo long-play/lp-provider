@@ -1,0 +1,4 @@
+WPConfig = {
+    platformUrl: 'https://e-will.org',
+    development: false
+};

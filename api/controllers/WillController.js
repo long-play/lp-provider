@@ -5,24 +5,29 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 
+const EthUtil = require('ethereumjs-util');
+
 module.exports = {
 
   create: (req, res) => {
     const contacts = req.body.contacts;
 
-    //todo: validate contacts
-    sails.log.debug(contacts);
-
-    Contact.confirmContact(contacts.email.email, contacts.email.code).then( (contact) => {
+    Contact.confirmContact(contacts.email.email, contacts.email.code).then( (/*contact*/) => {
       return Will.createWill(contacts);
     }).then( (will) => {
-      const msg = `${sails.config.custom.providerInfo.address}:${will.id}:${will.token}`;
-      const signature = '//todo:'; //todo: using sails.config.custom.providerInfo.privateKey
+      const msg = Buffer.concat([EthUtil.toBuffer(sails.config.custom.providerInfo.address), EthUtil.toBuffer('' + will.id), EthUtil.toBuffer(will.token)]);
+      const hash = EthUtil.keccak256(msg);
+      const signature = EthUtil.ecsign(hash, EthUtil.toBuffer(sails.config.custom.providerInfo.privateKey));
+
       return res.ok({
-        will: will.id,
+        willId: will.id,
         token: will.token,
         address: sails.config.custom.providerInfo.address,
-        signature: signature
+        signature: {
+          v: signature.v,
+          r: '0x' + signature.r.toString('hex'),
+          s: '0x' + signature.s.toString('hex'),
+        }
       });
     }).catch( (error) => {
       return res.serverError(error);
@@ -30,19 +35,24 @@ module.exports = {
   },
 
   setup: (req, res) => {
-    const will = req.body.will;
+    const willId = req.body.willId;
     const token = req.body.token;
     const address = req.body.address;
 
-    //todo: validate will, token & address
+    //todo: add checking of signature
 
-    Will.setupWill(will, address, token).then( (will) => {
-      const msg = `${will.id}:${will.key}`;
-      const signature = '//todo:'; //todo:
+    Will.setupWill(willId, address, token).then( (will) => {
+      const msg = Buffer.concat([EthUtil.toBuffer(will.id), EthUtil.toBuffer(will.encryptionKey)]);
+      const hash = EthUtil.keccak256(msg);
+      const signature = EthUtil.ecsign(hash, EthUtil.toBuffer(sails.config.custom.providerInfo.privateKey));
       return res.ok({
-        will: will.id,
+        willId: will.id,
         key: will.encryptionKey,
-        signature: signature
+        signature: {
+          v: signature.v,
+          r: '0x' + signature.r.toString('hex'),
+          s: '0x' + signature.s.toString('hex'),
+        }
       });
     }).catch( (error) => {
       return res.serverError(error);

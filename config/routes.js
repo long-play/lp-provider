@@ -26,6 +26,8 @@ module.exports.routes = {
   'POST /create-will': 'WillController.create',
   'POST /setup-will':  'WillController.setup',
 
+  'GET /heartbeat': 'HeartbeatController.submit',
+
   'GET /key/public': 'KeyController.find',
 
   /***************************************************************************
@@ -37,6 +39,6 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': { view: 'homepage' }
+  '/': '/create-will.html'
 
 };
