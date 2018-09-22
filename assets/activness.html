@@ -32,39 +32,17 @@
 </header>
 
 <div class="wrapper">
-  <main class="main">
-    <h1 class="main__title">Email confirmation</h1>
-    <p class="main__text">Fill in an email you are accessible for periodical confirmation you are alive.</p>
-    <form class="main__form  main__form--email  form" method="post" action="#">
-      <div class="form__data-block">
-        <div class="form__input  input-field">
-          <label class="input-field__description" for="email">Email</label>
-          <input class="input-field__input" type="email" id="email" autocomplete="on" placeholder="info@e-will.org" required>
-        </div>
-        <button class="form__submit  button  button--blue" type="submit">Submit</button>
-      </div>
-    </form>
-    <form class="main__form  main__form--code  form" method="post" action="#">
-      <p class="form__text  form__text--success  hidden">The confirmation code is sent to <span class="form__email">info@e-will.org</span>.<br> Please input the confirmation code below</p>
-      <p class="form__text  form__text--error  hidden">Failed to sent the confirmation e-mail. Please try again</p>
-      <div class="form__data-block  form__data-block--confirm hidden">
-        <div class="form__input  input-field">
-          <label class="input-field__description" for="code">Confirmation code</label>
-          <input class="input-field__input" type="number" id="code" placeholder="426921" required>
-        </div>
-        <button class="form__confirm  button  button--blue" type="submit">Confirm</button>
-      </div>
-    </form>
-    <p class="main__text  main__text--info  hidden">After confirmation you will be redirected to <a class="main__link" href="">E-will Platform</a></p>
-    <p class="main__text  main__text--error  hidden">Failed to confirm the email. Please try again</p>
+  <main class="main  main--success">
+    <h1 class="main__title">Your activity was successfully confirmed</h1>
+    <p class="main__text">Take a minute to appreciate that you're alive, and see you in the next month!</p>
   </main>
 </div>
 
-<script src="lib/jquery.min.js"></script>
-<script src="js/e-will-config.js"></script>
-<script src="js/e-will-create-will.js"></script>
-<script src="js/input-fields.min.js"></script>
-<script src="js/submit.min.js"></script>
+<footer class="footer">
+  <a class="footer__logo-link">
+    <img src="img/logo.svg" width="67" height="29">
+  </a>
+</footer>
 
 </body>
 </html>

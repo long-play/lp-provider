@@ -17,7 +17,7 @@ module.exports = {
       theWill = will;
       return EthereumService.refreshWill(theWill.id);
     }).then( (tx) => {
-      return res.ok({ message: `Will ${theWill.id} was successfully marked as active ${tx}` });
+      return res.redirect('/activness.html');
     }).catch( (err) => {
       return res.serverError({ error: err });
     });

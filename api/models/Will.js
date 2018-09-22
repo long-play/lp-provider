@@ -113,7 +113,7 @@ module.exports = {
 
   willsToCheckActivity: () => {
     const promise = Will.find({
-      lastCheckedAt: { '<': Date.now() - 30 * 24 * 3600 },
+      lastCheckedAt: { '<': Date.now() - 30 * 24 * 3600 * 1000 },
       state: 'active'
     }).then( (wills) => {
       sails.log.debug(wills);

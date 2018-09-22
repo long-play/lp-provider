@@ -430,6 +430,8 @@ html {
   box-sizing: inherit; }
 
 body {
+  display: flex;
+  flex-direction: column;
   margin: 0;
   height: 100%;
   font-size: 16px;
@@ -476,6 +478,18 @@ img {
     box-shadow: inset 0 -2px #aeaeae;
     border: 1px solid #cccccc;
     cursor: default; }
+
+.footer {
+  margin-top: 62px;
+  padding-bottom: 60px; }
+  @media (min-width: 1024px) {
+    .footer {
+      margin-top: 100px;
+      padding-bottom: 130px; } }
+  .footer .footer__logo-link {
+    display: block;
+    width: 67px;
+    margin: 0 auto; }
 
 @media (min-width: 1024px) {
   .form__data-block {
@@ -641,13 +655,14 @@ img {
       padding: 0; } }
   .main__title {
     font-size: 36px;
-    line-height: 1.2em;
+    line-height: 1.24em;
     font-weight: 700;
     margin: 0 0 22px; }
     @media (min-width: 1024px) {
       .main__title {
         margin-bottom: 27px;
-        font-size: 48px; } }
+        font-size: 48px;
+        line-height: 1.2em; } }
   .main__text {
     font-size: 16px;
     line-height: 22px;
@@ -693,6 +708,26 @@ img {
     @media (min-width: 1024px) {
       .main__link {
         padding-bottom: 0; } }
+  .main--success {
+    padding-top: 124px;
+    background-image: url("../img/success.svg");
+    background-repeat: no-repeat;
+    background-size: 89px 65px;
+    background-position: center 18px; }
+    @media (min-width: 1024px) {
+      .main--success {
+        padding-top: 215px;
+        background-position: center 47px;
+        background-size: auto; } }
+    .main--success .main__title {
+      max-width: 583px;
+      margin-left: auto;
+      margin-right: auto; }
+    .main--success .main__text {
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0; }
 
 .nav {
   display: flex;
@@ -731,6 +766,7 @@ img {
       opacity: 1; }
 
 .wrapper {
+  flex-grow: 1;
   min-width: 320px; }
   @media (min-width: 768px) {
     .wrapper {
