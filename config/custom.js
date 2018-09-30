@@ -46,8 +46,8 @@ module.exports.custom = {
   ethereum: {
     historyLength: 1024, // blocks, ~1.5 hours
     contracts: {
-      platform: '0xfdf0b3a199df8fb281ac5b156e9075cf3e7206cc',
-      escrow: '0x7b3de9412ecaccd65b8cec2916b74115bbd5a519'
+      platform: '0x46ca8e2a5f1874a9b14a5c58c72be21868e74565',
+      escrow: '0x470ea3f2be0b4d879a6a92c64f6a56153b2ca9f7'
     },
     gethUrl: 'https://e-will.valeyev.ru/geth/',
     swarmUrl: 'https://mh.getmobileup.com/swarm',
