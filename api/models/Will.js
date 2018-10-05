@@ -6,6 +6,7 @@
  */
 
 const Bytes = require('eth-lib/lib/bytes');
+const BN = require('bn.js');
 
 module.exports = {
 
@@ -22,6 +23,10 @@ module.exports = {
     },
 
     address: {
+      type: 'string'
+    },
+
+    userPublicKey: {
       type: 'string'
     },
 
@@ -46,6 +51,10 @@ module.exports = {
 
   },
 
+  willId: (will) => {
+    return sails.config.custom.providerInfo.masterAddress + ('000000000000000000000000' + (new BN(will.id, 10)).toString('hex')).slice(-24);
+  },
+
   createWill: (contacts) => {
     if (ValidationService.validateEmail(contacts.email.email) !== true) {
       return res.serverError(ErrorService.InvalidEmailFormat);
@@ -62,7 +71,7 @@ module.exports = {
     return promise;
   },
 
-  setupWill: (willId, address, token) => {
+  setupWill: (willId, address, token, userPublicKey) => {
     let theWill = null;
     const promise = Will.findOne({ id: willId }).then( (will) => {
       if (!will) {
@@ -75,6 +84,7 @@ module.exports = {
       theWill = will;
       will.state = 'pending';
       will.address = address;
+      will.userPublicKey = userPublicKey;
       return Will.update({ id: will.id }, will);
     }).then( () => {
       return Promise.resolve(theWill);
@@ -104,6 +114,7 @@ module.exports = {
       }
       theWill = will;
       will.state = 'active';
+      lastCheckedAt: Date.now();
       return Will.update({ id: will.id }, will);
     }).then( () => {
       return Promise.resolve(theWill);
@@ -113,10 +124,19 @@ module.exports = {
 
   willsToCheckActivity: () => {
     const promise = Will.find({
-      lastCheckedAt: { '<': Date.now() - 30 * 24 * 3600 * 1000 },
+      lastCheckedAt: { '<': Date.now() - sails.config.custom.activityConfirmationTimeout },
       state: 'active'
     }).then( (wills) => {
-      sails.log.debug(wills);
+      return Promise.resolve(wills);
+    });
+    return promise;
+  },
+
+  willsToRelease: () => {
+    const promise = Will.find({
+      lastCheckedAt: { '<': Date.now() - sails.config.custom.releaseWillTimeout },
+      state: 'active'
+    }).then( (wills) => {
       return Promise.resolve(wills);
     });
     return promise;
@@ -174,20 +194,11 @@ module.exports = {
     return promise;
   },
 
-  applyWill: (willId) => {
-    let theWill = null;
-    const promise = Will.findOne({ id: willId }).then( (will) => {
-      if (!will) {
-        return Promise.reject(ErrorService.ObjectNotFound);
-      } else if (will.state !== 'active') {
-        return Promise.reject(ErrorService.WrongState);
-      }
-      theWill = will;
-      will.state = 'applied';
-      will.appliedAt = Date.now();
-      return Will.update({ id: will.id }, will);
-    }).then( () => {
-      return Promise.resolve(theWill);
+  applyWill: (will) => {
+    will.state = 'applied';
+    will.appliedAt = Date.now();
+    const promise = Will.update({ id: will.id }, will).then( () => {
+      return Promise.resolve(will);
     });
     return promise;
   }

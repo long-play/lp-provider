@@ -45,7 +45,7 @@ function activateWill(willId, will) {
   const activateWill = ewPlatform.methods.activateWill(willId);
   const promise = activateWill.estimateGas({ from: sails.config.custom.providerInfo.address }).then( (gasLimit) => {
     const payload = activateWill.encodeABI();
-    console.log(payload);
+    sails.log.debug(payload);
 
     const rawTx = {
       to: ewPlatform.options.address,
@@ -115,11 +115,12 @@ module.exports = {
   /**
    * `EthereumService.refreshWill`
    */
-  refreshWill: (willId) => {
+  refreshWill: (will) => {
+    const willId = Will.willId(will);
     const refreshWill = ewPlatform.methods.refreshWill(willId);
     const promise = refreshWill.estimateGas({ from: sails.config.custom.providerInfo.address }).then( (gasLimit) => {
       const payload = refreshWill.encodeABI();
-      console.log(payload);
+      sails.log.debug(payload);
 
       const rawTx = {
         to: ewPlatform.options.address,
@@ -135,6 +136,40 @@ module.exports = {
     }).then( (txId) => {
       sails.log.info(`Tx for refreshing will ${willId} sent: ${txId}`);
       return Promise.resolve(txId);
+    }).catch( (err) => {
+      sails.log.error(`Failed to refresh will ${willId}: ${JSON.stringify(err)}`);
+    });
+
+    return promise;
+  },
+
+  /**
+   * `EthereumService.releaseWill`
+   */
+  releaseWill: (will) => {
+    const willId = Will.willId(will);
+    const decryptionKey = '0xaddECD4'; //todo: ECDH(will.userPublicKey, sails.config.custom.providerInfo.privateKey);
+    const releaseWill = ewPlatform.methods.applyWill(willId, decryptionKey);
+    const promise = releaseWill.estimateGas({ from: sails.config.custom.providerInfo.address }).then( (gasLimit) => {
+      const payload = releaseWill.encodeABI();
+      sails.log.debug(payload);
+
+      const rawTx = {
+        to: ewPlatform.options.address,
+        data: payload,
+        value: 0,
+        gasLimit: gasLimit,
+        chainId: sails.config.custom.ethereum.chainID
+      };
+      return account.signTransaction(rawTx);
+    }).then( (tx) => {
+      sails.log.info(`Tx for releasing will ${will.id} (${willId}) signed: ${tx.rawTransaction.toString('hex')}`);
+      return sendTx(tx.rawTransaction);
+    }).then( (txId) => {
+      sails.log.info(`Tx for releasing will ${willId} sent: ${txId}`);
+      return Promise.resolve(txId);
+    }).catch( (err) => {
+      sails.log.error(`Failed to release will ${willId}: ${JSON.stringify(err)}`);
     });
 
     return promise;

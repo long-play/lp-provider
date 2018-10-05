@@ -15,7 +15,7 @@ module.exports = {
       return Will.confirmWill(heartbeat.willId);
     }).then( (will) => {
       theWill = will;
-      return EthereumService.refreshWill(theWill.id);
+      return EthereumService.refreshWill(theWill);
     }).then( (tx) => {
       return res.redirect('/activness.html');
     }).catch( (err) => {

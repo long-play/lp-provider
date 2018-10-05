@@ -17,15 +17,40 @@ function sendActivityEmail(will) {
   return promise;
 }
 
+function releaseWill(will) {
+  const promise = EthereumService.releaseWill(will).then( (txId) => {
+    return Will.applyWill(will);
+  }).then( () => {
+  });
+
+  return promise;
+}
+
 module.exports = {
   /**
    * `ActivityService.check`
    */
   check: () => {
     const promise = Will.willsToCheckActivity().then( (wills) => {
+      sails.log.info('Wills to check activity:');
       sails.log.info(wills);
       for (let will of wills) {
         sendActivityEmail(will);
+      }
+    });
+
+    return promise;
+  },
+
+  /**
+   * `ActivityService.release`
+   */
+  release: () => {
+    const promise = Will.willsToRelease().then( (wills) => {
+      sails.log.info('Wills to release:');
+      sails.log.info(wills);
+      for (let will of wills) {
+        releaseWill(will);
       }
     });
 

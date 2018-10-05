@@ -38,10 +38,13 @@ module.exports = {
     const willId = req.body.willId;
     const token = req.body.token;
     const address = req.body.address;
+    const userPublicKey = req.body.userPublicKey;
+    const userAddress = '0x' + EthUtil.pubToAddress(EthUtil.toBuffer('0x' + userPublicKey.slice(4))).toString('hex');
 
+    //todo: check userAddress.toLowerCase() == address.toLowerCase()
     //todo: add checking of signature
 
-    Will.setupWill(willId, address, token).then( (will) => {
+    Will.setupWill(willId, address, token, userPublicKey).then( (will) => {
       const msg = Buffer.concat([EthUtil.toBuffer(will.id), EthUtil.toBuffer(will.encryptionKey)]);
       const hash = EthUtil.keccak256(msg);
       const signature = EthUtil.ecsign(hash, EthUtil.toBuffer(sails.config.custom.providerInfo.privateKey));
