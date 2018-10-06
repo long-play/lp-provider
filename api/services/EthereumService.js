@@ -7,6 +7,12 @@
 const BN = require('bn.js');
 const Web3 = require('web3');
 const web3 = new Web3(sails.config.custom.ethereum.gethUrl);
+
+const createHash = require('create-hash');
+const EC = require('elliptic').ec;
+const ec = new EC('secp256k1');
+const ecparams = ec.curve;
+
 const account = web3.eth.accounts.privateKeyToAccount(sails.config.custom.providerInfo.privateKey);
 const ewPlatform = new web3.eth.Contract(require('../abis/abi-platform.json'), sails.config.custom.ethereum.contracts.platform);
 let oldestBlockNumber = 0;
@@ -148,7 +154,9 @@ module.exports = {
    */
   releaseWill: (will) => {
     const willId = Will.willId(will);
-    const decryptionKey = '0xaddECD4'; //todo: ECDH(will.userPublicKey, sails.config.custom.providerInfo.privateKey);
+    const pubKey = ec.keyFromPublic(will.userPublicKey.slice(2), 'hex');
+    const privKey = ec.keyFromPrivate(sails.config.custom.providerInfo.privateKey.slice(2), 'hex');
+    const decryptionKey = '0x' + createHash('sha256').update(privKey.derive(pubKey.pub).toString('hex')).digest().toString('hex');
     const releaseWill = ewPlatform.methods.applyWill(willId, decryptionKey);
     const promise = releaseWill.estimateGas({ from: sails.config.custom.providerInfo.address }).then( (gasLimit) => {
       const payload = releaseWill.encodeABI();
