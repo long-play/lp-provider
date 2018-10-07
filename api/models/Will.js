@@ -19,7 +19,7 @@ module.exports = {
     state: {
       required: true,
       type: 'string',
-      isIn: ['new', 'pending', 'active', 'applied', 'deleted', 'unpaid']
+      isIn: ['new', 'pending', 'active', 'applied', 'claimed', 'deleted', 'unpaid']
     },
 
     address: {
@@ -114,10 +114,19 @@ module.exports = {
       }
       theWill = will;
       will.state = 'active';
-      lastCheckedAt: Date.now();
+      will.lastCheckedAt = Date.now();
       return Will.update({ id: will.id }, will);
     }).then( () => {
       return Promise.resolve(theWill);
+    });
+    return promise;
+  },
+
+  activeWills: () => {
+    const promise = Will.find({
+      state: 'active'
+    }).then( (wills) => {
+      return Promise.resolve(wills);
     });
     return promise;
   },

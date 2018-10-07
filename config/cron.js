@@ -1,4 +1,12 @@
 module.exports.cron = {
+  checkStatus: {
+    schedule: '0 */5 * * * *',  // for prod it should be once a day
+    onTick: function () {
+      EthereumService.checkStatus();
+    },
+    runOnInit: true
+  },
+
   checkActivity: {
     schedule: '0 */5 * * * *',  // for prod it should be once a day
     onTick: function () {
@@ -16,7 +24,7 @@ module.exports.cron = {
   },
 
   handleNewWills: {
-    schedule: '0 */2 * * * *',
+    schedule: '*/10 * * * * *',
     onTick: function () {
       EthereumService.handleNewWills();
     },
