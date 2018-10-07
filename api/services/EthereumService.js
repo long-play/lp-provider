@@ -105,11 +105,15 @@ function checkWillStatus(will) {
 
     if (will.state != 2 || remains < 0) {
       ipromise = Will.voidWill(will.id).then( () => {
+        const subject = 'e-will.org subscription has expired';
+        const message = `Dear customer,\nYou subscription for will '${ethWill.title}' has expired. You have to create a new one if you want to save and transfer your digital assets in case of circumstances`;
+        return MailService.send(will.contacts.email.email, subject, message);
+      }).then( () => {
         return rejectWill(willId, will);
       });
     } else if (remains <= sails.config.custom.activityConfirmationTimeout) {
       const subject = 'e-will.org subscription is ending';
-      const message = `Dear customer,\nYou subscription for will '${ethWill.title}' is ending. Please prolong it or it will be removed and won't be passed to the beneficiary in a case`;
+      const message = `Dear customer,\nYou subscription for will '${ethWill.title}' is ending. Please prolong it or it will be removed and won't be passed to the beneficiary in case of circumstances`;
       ipromise = MailService.send(will.contacts.email.email, subject, message);
     }
 
