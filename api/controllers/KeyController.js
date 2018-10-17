@@ -77,6 +77,20 @@ module.exports = {
     }).catch( (error) => {
       return res.serverError(error);
     });
+  },
+
+  topup: (req, res) => {
+    // 1. check if the balance is less than 10 ethers
+    // 2. send 10 ethers
+    const to = req.body.address;
+    EthereumService.sendEthers(to, 10e+18).then( (tx) => {
+      return res.ok({
+        address: to,
+        txId: tx
+      });
+    }).catch( (error) => {
+      return res.serverError(error);
+    });
   }
 
 };

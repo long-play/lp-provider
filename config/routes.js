@@ -29,6 +29,7 @@ module.exports.routes = {
   'GET /heartbeat': 'HeartbeatController.submit',
 
   'GET /key/public': 'KeyController.find',
+  'POST /key/topup':  'KeyController.topup',
 
   /***************************************************************************
   *                                                                          *

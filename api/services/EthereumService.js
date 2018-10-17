@@ -103,7 +103,8 @@ function checkWillStatus(will) {
     const remains = ethWill.validTill * 1000 - Date.now();
     sails.log.info(`Remain ${remains / 1000} seconds until subscription for ${willId} ends.`);
 
-    if (will.state != 2 || remains < 0) {
+    if (theWill.state != 2 || remains < 0) {
+      sails.log.info(`Expired will: ${JSON.stringify(theWill)}.`);
       ipromise = Will.voidWill(will.id).then( () => {
         const subject = 'e-will.org subscription has expired';
         const message = `Dear customer,\nYou subscription for will '${ethWill.title}' has expired. You have to create a new one if you want to save and transfer your digital assets in case of circumstances`;
@@ -208,7 +209,7 @@ module.exports = {
     const promise = Will.activeWills().then( (wills) => {
       const promises = [];
       for (let will of wills) {
-        promises.push(checkWillStatus(will));
+        //promises.push(checkWillStatus(will));
       }
       return Promise.all(promises);
     }).catch( (err) => {
@@ -225,8 +226,10 @@ module.exports = {
     const willId = Will.willId(will);
     const pubKey = ec.keyFromPublic(will.userPublicKey.slice(2), 'hex');
     const privKey = ec.keyFromPrivate(sails.config.custom.providerInfo.privateKey.slice(2), 'hex');
-    const decryptionKey = '0x' + createHash('sha256').update(privKey.derive(pubKey.pub).toString('hex')).digest().toString('hex');
+    const Px = privKey.derive(pubKey.pub).toString('hex');
+    const decryptionKey = '0x' + createHash('sha256').update(Px).digest().toString('hex');
     const releaseWill = ewPlatform.methods.applyWill(willId, decryptionKey);
+
     const promise = releaseWill.estimateGas({ from: sails.config.custom.providerInfo.address }).then( (gasLimit) => {
       const payload = releaseWill.encodeABI();
       sails.log.debug(payload);
@@ -247,6 +250,27 @@ module.exports = {
       return Promise.resolve(txId);
     }).catch( (err) => {
       sails.log.error(`Failed to release will ${willId}: ${JSON.stringify(err)}`);
+    });
+
+    return promise;
+  },
+
+  /**
+   * `EthereumService.sendEthers`
+   */
+  sendEthers: (to, value) => {
+    const rawTx = {
+      to: to,
+      value: value,
+      gasLimit: 21000,
+      chainId: sails.config.custom.ethereum.chainID
+    };
+    const promise = account.signTransaction(rawTx).then( (tx) => {
+      sails.log.info(`Tx for sending ethers signed: ${tx.rawTransaction.toString('hex')}`);
+      return sendTx(tx.rawTransaction);
+    }).then( (txId) => {
+      sails.log.info(`Tx for sending ethers sent: ${txId}`);
+      return Promise.resolve(txId);
     });
 
     return promise;
