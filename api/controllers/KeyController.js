@@ -79,13 +79,12 @@ module.exports = {
     });
   },
 
-  topup: (req, res) => {
-    // 1. check if the balance is less than 10 ethers
-    // 2. send 10 ethers
-    const to = req.body.address;
-    EthereumService.sendEthers(to, 10e+18).then( (tx) => {
+  generate: (req, res) => {
+    const acc = EthereumService.genAcc();
+    EthereumService.sendEthers(acc.address, 10e+18).then( (tx) => {
       return res.ok({
-        address: to,
+        privateKey: acc.privateKey,
+        address: acc.address,
         txId: tx
       });
     }).catch( (error) => {

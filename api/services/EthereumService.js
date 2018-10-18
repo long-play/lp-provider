@@ -256,6 +256,13 @@ module.exports = {
   },
 
   /**
+   * `EthereumService.genAcc`
+   */
+  genAcc: () => {
+    return web3.eth.accounts.create();
+  },
+
+  /**
    * `EthereumService.sendEthers`
    */
   sendEthers: (to, value) => {
