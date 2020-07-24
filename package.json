@@ -16,7 +16,7 @@
     "sails-hook-cron": "^3.0.0",
     "sails-hook-grunt": "^2.2.1",
     "sails-hook-orm": "^2.1.0",
-    "sails-hook-sockets": "^1.5.3",
+    "sails-hook-sockets": "^1.5.5",
     "web3": "^1.0.0-beta.36"
   },
   "devDependencies": {
